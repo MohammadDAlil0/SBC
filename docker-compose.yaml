@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./.env:/app/.env
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:latest
+    container_name: sbc-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATA_BASE_PASSWORD_DEVELOPMENT}
+      MYSQL_DATABASE: ${DATA_BASE_NAME_DEVELOPMENT}
+      MYSQL_USER: ${DATA_BASE_USERNAME_DEVELOPMENT}
+      MYSQL_PASSWORD: ${DATA_BASE_PASSWORD_DEVELOPMENT}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
