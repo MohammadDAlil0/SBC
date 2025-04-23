@@ -1,17 +1,6 @@
 version: '3.8'
 
 services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./uploads:/app/uploads
-      - ./.env:/app/.env
-    environment:
-      - NODE_ENV=development
-    restart: unless-stopped
-
   mysql:
     image: mysql:latest
     container_name: sbc-mysql
