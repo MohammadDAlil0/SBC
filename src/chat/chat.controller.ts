@@ -1,9 +1,10 @@
 // src/chat/chat.controller.ts
-import { Controller, Post, Get, Param, Body } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, Delete, Query } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { AskQuestionDecorator, GetChatMessagesDecorator, GetUserChatsDecorator, StartChatDecorator } from 'src/core/decorators/appliers';
+import { AskQuestionDecorator, DeleteChatDecorator, GetChatMessagesDecorator, GetUserChatsDecorator, StartChatDecorator } from 'src/core/decorators/appliers';
 import { GetUser } from 'src/core/decorators/auth';
 import { QuestionDto } from './dto';
+import { PaginationDto } from 'src/core/constants';
 
 @Controller('chat')
 export class ChatController {
@@ -11,8 +12,8 @@ export class ChatController {
 
   @Get()
   @GetUserChatsDecorator()
-  async getUserChats(@GetUser('id') userId: string) {
-    return this.chatService.getUserChats(userId);
+  async getUserChats(@GetUser('id') userId: string, @Query() filter: PaginationDto) {
+    return this.chatService.getUserChats(userId, filter);
   }
 
   @Post(':codeId')
@@ -23,8 +24,8 @@ export class ChatController {
 
   @Get(':chatId')
   @GetChatMessagesDecorator()
-  async getChatMessages(@GetUser('id') userId: string, @Param('chatId') chatId: string) {
-    return this.chatService.getChatMessages(userId, chatId);
+  async getChatMessages(@GetUser('id') userId: string, @Param('chatId') chatId: string, @Query() filter: PaginationDto) {
+    return this.chatService.getChatMessages(userId, chatId, filter);
   }
 
   @Post(':chatId/ask')
@@ -35,5 +36,11 @@ export class ChatController {
     @GetUser('id') userId: string
   ) {
     return this.chatService.askQuestion(chatId, questionDto, userId);
+  }
+
+  @Delete(':chatId')
+  @DeleteChatDecorator()
+  async deleteChat(@Param('chatId') chatId: string) {
+    this.chatService.deleteChat(chatId);
   }
 }

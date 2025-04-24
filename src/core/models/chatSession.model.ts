@@ -23,6 +23,6 @@ export class ChatSession extends BaseModel{
     @JoinColumn()
     code: User;
 
-    @OneToMany(() => Message, message => message.chatSession)
+    @OneToMany(() => Message, message => message.chatSession, { onDelete: 'CASCADE' })
     messages: Message[];
 }

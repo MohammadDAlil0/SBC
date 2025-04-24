@@ -37,6 +37,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "langchain": "^0.3.22",
+    "mailersend": "^2.5.0",
     "mysql2": "^3.14.0",
     "passport-jwt": "^4.0.1",
     "pdf-lib": "^1.17.1",

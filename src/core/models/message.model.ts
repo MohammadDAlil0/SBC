@@ -15,7 +15,7 @@ export class Message  extends BaseModel{
     @Column()
     fromUser: boolean;
 
-    @ManyToOne(() => ChatSession, chatSession => chatSession.messages)
+    @ManyToOne(() => ChatSession, chatSession => chatSession.messages, {onDelete: 'CASCADE'})
     @JoinColumn()
     chatSession: ChatSession;
 }

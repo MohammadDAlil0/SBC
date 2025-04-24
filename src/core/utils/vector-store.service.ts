@@ -30,16 +30,20 @@ export class VectorStoreService {
     });
   }
 
-  async createVectorStore(documents: any[], collectionName: string) {
-    return QdrantVectorStore.fromDocuments(
-      documents,
-      this.embeddings,
-      {
-        url: this.configService.getOrThrow('QDRANT_URL'),
-        collectionName,
-        client: this.client,
-      }
-    );
+  async createVectorStore(documents: any[], collectionName: string, batchSize = 100) {
+    const vectorStore = new QdrantVectorStore(this.embeddings, {
+      url: this.configService.getOrThrow('QDRANT_URL'),
+      collectionName,
+      client: this.client,
+    });
+  
+    // Process documents in batches
+    for (let i = 0; i < documents.length; i += batchSize) {
+      const batch = documents.slice(i, i + batchSize);
+      await vectorStore.addDocuments(batch);
+    }
+  
+    return vectorStore;
   }
 
   async collectionExists(collectionName: string): Promise<boolean> {

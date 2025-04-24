@@ -51,13 +51,17 @@ export class httpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     let statusCode = (exception.getStatus ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR)
-
+    let messages = [exception.message];
     console.log(exception.constructor.name);
+
+    if (exception.constructor.name === 'GaxiosError') {
+      messages = ['Error Calling outer service, check your internet connection'];
+    }
     
     response.status(statusCode).json(GlobalResponse({
       path: request.url,
       statusCode: statusCode,
-      messages: [exception.message]
+      messages
     }));
   }
 }

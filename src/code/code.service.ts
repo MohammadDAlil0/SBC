@@ -45,8 +45,15 @@ export class CodeService {
         );
         const chunks = await this.pdfProcessingService.loadAndSplitPdf(filePath);
 
-        // 3. Store in vector database
-        await this.vectorStoreService.createVectorStore(chunks, addBookDto.name);
+        try {
+            // 3. Store in vector database
+            await this.vectorStoreService.createVectorStore(chunks, addBookDto.name);
+        }
+        catch(err) {
+            console.log(err);
+            return err;
+        }
+
 
         // // 5. Save to database
         const code = this.codeRepository.create({

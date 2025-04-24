@@ -4,6 +4,7 @@ import { ChatSession, Code, Message, User } from 'src/core/models';
 import { QaService } from 'src/core/utils';
 import { Repository } from 'typeorm';
 import { QuestionDto } from './dto';
+import { PaginationDto } from 'src/core/constants';
 
 @Injectable()
 export class ChatService {
@@ -16,11 +17,16 @@ export class ChatService {
     // private readonly config: ConfigService,
   ) {}
 
-  async getUserChats(userId: string) {
+  async getUserChats(userId: string, filter: PaginationDto) {
+    const { page = 1, limit = 10, ...rest } = filter;
+    const offset = (page - 1) * limit;
+
     return this.chatSession.find({
       where: {
         user: { id: userId },
       },
+      take: limit,
+      skip: offset,
     });
   }
 
@@ -46,7 +52,7 @@ export class ChatService {
     return await this.chatSession.save(newSession);
   }
 
-  async getChatMessages(userId: string, chatSessionId: string) {
+  async getChatMessages(userId: string, chatSessionId: string, filter: PaginationDto) {
     await this.chatSession.findOneOrFail({
       where: {
         id: chatSessionId,
@@ -56,7 +62,7 @@ export class ChatService {
 
     return this.message.find({
       where: { chatSession: { id: chatSessionId } },
-      order: { createdAt: 'ASC' }, // Oldest messages first
+      order: { createdAt: 'DESC' },
       select: {
         id: true,
         content: true,
@@ -104,5 +110,11 @@ export class ChatService {
       answer: aiMessage,
       sources, // Include sources in response
     };
+  }
+  
+  async deleteChat(chatId: string) {
+    await this.chatSession.delete({
+      id: chatId
+    });
   }
 }

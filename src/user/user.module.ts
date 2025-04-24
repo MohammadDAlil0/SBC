@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ChatSession, Code, Message, User } from 'src/core/models';
+import { User } from 'src/core/models';
 import { JwtModule } from '@nestjs/jwt';
+import { EmailService } from 'src/core/utils';
 
 @Module({
   imports: [
@@ -11,6 +12,6 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule.register({}),
   ],
   controllers: [UserController],
-  providers: [UserService]
+  providers: [UserService, EmailService]
 })
 export class UserModule {}
