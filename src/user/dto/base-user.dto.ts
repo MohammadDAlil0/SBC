@@ -57,7 +57,6 @@ export class BaseUserDto {
         example: '+963958463123'
     })
     @IsOptional()
-    @IsPhoneNumber()
     phone?: string;
     
     @ApiProperty({

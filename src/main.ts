@@ -4,9 +4,15 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { badRequestExceptionFilter, httpExceptionFilter, TypeORMErrorFilter } from './core/exceptions';
 import { CustomResponseInterceptor } from './core/interceptors';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors();
+
+  // Security Midllewares
+  app.use(helmet());
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true
