@@ -71,7 +71,7 @@ Answer:`;
   }
 
   private async getQaChain(vectorStore: QdrantVectorStore) {
-    return RetrievalQAChain.fromLLM(this.llm, vectorStore.asRetriever(4), {
+    return RetrievalQAChain.fromLLM(this.llm, vectorStore.asRetriever(8), {
       prompt: this.prompt,
       returnSourceDocuments: true,
     });
