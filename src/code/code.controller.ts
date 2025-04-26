@@ -9,14 +9,15 @@ export class CodeController {
 
     @Post()
     @AddCodeDecorator()
-    uploadOldFile(
+    uploadBook(
         @Body() addBookDto: AddCodeDto,
-        @UploadedFiles() files: {
-            book: Express.Multer.File[],
-            photo?: Express.Multer.File[]
-        }
-    ) {
-        return this.codeService.uploadOldFile(addBookDto, files);
+        // @UploadedFiles() files: {
+        //     book: Express.Multer.File[],
+        //     photo?: Express.Multer.File[]
+        // }
+    ) 
+    {
+        return this.codeService.uploadOldFile(addBookDto);
     }
 
     @Get()

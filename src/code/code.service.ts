@@ -18,31 +18,31 @@ export class CodeService {
 
     async uploadOldFile(
         addBookDto: AddCodeDto,
-        UploadedFilesfiles: {
-            book: Express.Multer.File[],
-            photo?: Express.Multer.File[]
-        }
+        // UploadedFilesfiles: {
+        //     book: Express.Multer.File[],
+        //     photo?: Express.Multer.File[]
+        // }
     ) {
         // 1. Store files
-        const bookUrl = await this.fileStorageService.storeFile(
-            UploadedFilesfiles.book[0],
-            'books',
-        );
+        // const bookUrl = await this.fileStorageService.storeFile(
+        //     UploadedFilesfiles.book[0],
+        //     'books',
+        // );
         
-        let photoUrl: string | undefined = undefined;
-        if (UploadedFilesfiles.photo) {
-            photoUrl = await this.fileStorageService.storeFile(
-            UploadedFilesfiles.photo[0],
-            'photos',
-            );
-        }
+        // let photoUrl: string | undefined = undefined;
+        // if (UploadedFilesfiles.photo) {
+        //     photoUrl = await this.fileStorageService.storeFile(
+        //     UploadedFilesfiles.photo[0],
+        //     'photos',
+        //     );
+        // }
 
-        // 2. Process PDF into chunks - use the stored file directly
-        const filePath = path.join(
-            __dirname, 
-            '../../uploads', 
-            bookUrl.replace('/uploads/', '')
-        );
+        // // 2. Process PDF into chunks - use the stored file directly
+        // const filePath = path.join(
+        //     __dirname, 
+        //     '../../uploads', 
+        //     bookUrl.replace('/uploads/', '')
+        // );
         // const chunks = await this.pdfProcessingService.loadAndSplitPdf(filePath);
 
         // await this.vectorStoreService.createVectorStore(chunks, addBookDto.name);
@@ -52,8 +52,8 @@ export class CodeService {
         const code = this.codeRepository.create({
             name: addBookDto.name,
             description: addBookDto.description,
-            bookUrl,
-            photoUrl
+            bookUrl: 'none',
+            photoUrl: 'none'
         });
 
         return this.codeRepository.save(code);
