@@ -27,7 +27,15 @@ async function bootstrap() {
   const documentFactory = SwaggerModule.createDocument(app, swaggerConfig, {
     autoTagControllers: true
   });
-  SwaggerModule.setup('api', app, documentFactory);
+  SwaggerModule.setup('api', app, documentFactory, {
+    customSiteTitle: 'API Docs',
+    // customfavIcon: 'https://your-cdn/favicon.png', // Optional
+    customJs: [
+      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js',
+      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js',
+    ],
+    customCssUrl: 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css',
+  });
 
   // Global filters and interceptors
   app.useGlobalFilters(new httpExceptionFilter(), new badRequestExceptionFilter(), new TypeORMErrorFilter());
