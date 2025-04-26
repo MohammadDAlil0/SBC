@@ -29,6 +29,11 @@ export function AddCodeDecorator() {
         //                 example: 'هذا الكود يتضمن كل شيء عن التمديدات الكهربائية',
         //                 description: 'Optional description' 
         //             },
+        //             collectionName: { 
+        //                 type: 'string',
+        //                 example: 'B1',
+        //                 description: 'Collection Name (required)' 
+        //             },
         //             book: {
         //                 type: 'string',
         //                 format: 'binary',

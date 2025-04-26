@@ -23,7 +23,7 @@ export class CodeService {
         //     photo?: Express.Multer.File[]
         // }
     ) {
-        // 1. Store files
+        // // 1. Store files
         // const bookUrl = await this.fileStorageService.storeFile(
         //     UploadedFilesfiles.book[0],
         //     'books',
@@ -45,13 +45,14 @@ export class CodeService {
         // );
         // const chunks = await this.pdfProcessingService.loadAndSplitPdf(filePath);
 
-        // await this.vectorStoreService.createVectorStore(chunks, addBookDto.name);
+        // await this.vectorStoreService.createVectorStore(chunks, addBookDto.collectionName);
 
 
         // // 5. Save to database
         const code = this.codeRepository.create({
             name: addBookDto.name,
             description: addBookDto.description,
+            collectionName: addBookDto.collectionName,
             bookUrl: 'none',
             photoUrl: 'none'
         });

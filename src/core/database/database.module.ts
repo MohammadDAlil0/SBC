@@ -17,6 +17,7 @@ import { ChatSession, Code, Message, User } from 'src/core/models';
           password: configService.getOrThrow(`DATA_BASE_PASSWORD_${nodeEnv}`),
           database: configService.getOrThrow(`DATA_BASE_NAME_${nodeEnv}`),
           synchronize: true,
+          dropSchema: true,
           // logging: configService.getOrThrow(`DATA_BASE_LOGGING_${nodeEnv}`) === 'true',
           entities: [User, Message, Code, ChatSession]
         };

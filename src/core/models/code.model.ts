@@ -17,6 +17,9 @@ export class Code  extends BaseModel{
     @Column({ length: 400 })
     bookUrl: string;
 
+    @Column({length: 50})
+    collectionName: string;
+
     @Column({ length: 400, nullable: true})
     photoUrl: string;
 

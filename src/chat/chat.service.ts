@@ -106,7 +106,7 @@ export class ChatService {
     // 3. Get AI response (implement this in QaService)
     const { answer, sources } = await this.qaService.getAnswer(
       questionDto.content,
-      chatSession.code.name,
+      chatSession.code.collectionName,
     );
 
     // 4. Save AI response

@@ -21,6 +21,15 @@ export class BaseCode {
     description: string;
 
     @ApiProperty({
+        description: 'Collection Name',
+        type: String,
+        example: 'B1'
+    })
+    @IsString()
+    @Length(1, 50)
+    collectionName: string;
+
+    @ApiProperty({
         description: "Book's PDF URL",
         type: String,
         example: ''

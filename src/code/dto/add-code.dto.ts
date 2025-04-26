@@ -1,4 +1,4 @@
 import { PickType } from "@nestjs/swagger";
 import { BaseCode } from "./base-code.dto";
 
-export class AddCodeDto extends PickType(BaseCode, ['name', 'description']) {}
+export class AddCodeDto extends PickType(BaseCode, ['name', 'description', 'collectionName']) {}
