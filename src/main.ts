@@ -5,14 +5,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { badRequestExceptionFilter, httpExceptionFilter, TypeORMErrorFilter } from './core/exceptions';
 import { CustomResponseInterceptor } from './core/interceptors';
 import helmet from 'helmet';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.useStaticAssets(join(__dirname, '..', 'node_modules', 'swagger-ui-dist'), {
-    prefix: '/swagger-ui-assets'
-  });
+  const app = await NestFactory.create(AppModule);
 
   app.enableCors({
     origin: '*',
@@ -21,7 +16,7 @@ async function bootstrap() {
   });
 
   // Security Midllewares
-  app.use(helmet());
+  app.use(helmet({ contentSecurityPolicy: false, hsts: false }));
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true
@@ -36,15 +31,7 @@ async function bootstrap() {
   const documentFactory = SwaggerModule.createDocument(app, swaggerConfig, {
     autoTagControllers: true
   });
-  SwaggerModule.setup('api', app, documentFactory, {
-    customSiteTitle: 'API Docs',
-    customfavIcon: '/swagger-ui-assets/favicon-32x32.png',
-    customJs: [
-      '/swagger-ui-assets/swagger-ui-bundle.js',
-      '/swagger-ui-assets/swagger-ui-standalone-preset.js'
-    ],
-    customCssUrl: '/swagger-ui-assets/swagger-ui.css'
-  });
+  SwaggerModule.setup('api', app, documentFactory);
 
   // Global filters and interceptors
   app.useGlobalFilters(new httpExceptionFilter(), new badRequestExceptionFilter(), new TypeORMErrorFilter());
