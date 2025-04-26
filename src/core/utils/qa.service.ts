@@ -42,8 +42,11 @@ Answer:`;
 
   async getAnswer(question: string, codeName: string) {
     try {
+      console.log(codeName);
       // 1. Get the vector store
       const vectorStore = await this.vectorStoreService.getVectorStore(codeName);
+
+      console.log('vector database*********************************', vectorStore);
 
       // 2. Create QA chain
       const qaChain = await this.getQaChain(vectorStore);

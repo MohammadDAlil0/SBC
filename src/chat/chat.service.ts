@@ -86,7 +86,7 @@ export class ChatService {
     console.log('Print chatSession ****************************************');
     console.log(chatSession);
     const chatSessions = await this.chatSession.find({});
-    const codes = await this.chatSession.find({});
+    const codes = await this.code.find({});
 
     console.log('Start *****************************************');
     console.log(chatSessions);
