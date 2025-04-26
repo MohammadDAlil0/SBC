@@ -83,6 +83,18 @@ export class ChatService {
       relations: ['code'],
     }) as any;
 
+    console.log('Print chatSession ****************************************');
+    console.log(chatSession);
+    const chatSessions = await this.chatSession.find({});
+    const codes = await this.chatSession.find({});
+
+    console.log('Start *****************************************');
+    console.log(chatSessions);
+    console.log('**********************************************');
+    console.log(codes);
+    console.log('*******************************************');
+
+
     // 2. Save user's question
     const userMessage = this.message.create({
       content: questionDto.content,

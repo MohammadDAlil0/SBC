@@ -51,6 +51,8 @@ Answer:`;
       // 3. Get answer
       const result = await this.answerQuestion(qaChain, question);
 
+      console.log(result);
+
 
       // 4. Format response
       return {
