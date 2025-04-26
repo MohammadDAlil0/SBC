@@ -5,11 +5,20 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { badRequestExceptionFilter, httpExceptionFilter, TypeORMErrorFilter } from './core/exceptions';
 import { CustomResponseInterceptor } from './core/interceptors';
 import helmet from 'helmet';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useStaticAssets(join(__dirname, '..', 'node_modules', 'swagger-ui-dist'), {
+    prefix: '/swagger-ui-assets'
+  });
 
-  app.enableCors();
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
+  });
 
   // Security Midllewares
   app.use(helmet());
@@ -29,12 +38,12 @@ async function bootstrap() {
   });
   SwaggerModule.setup('api', app, documentFactory, {
     customSiteTitle: 'API Docs',
-    // customfavIcon: 'https://your-cdn/favicon.png', // Optional
+    customfavIcon: '/swagger-ui-assets/favicon-32x32.png',
     customJs: [
-      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js',
-      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js',
+      '/swagger-ui-assets/swagger-ui-bundle.js',
+      '/swagger-ui-assets/swagger-ui-standalone-preset.js'
     ],
-    customCssUrl: 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css',
+    customCssUrl: '/swagger-ui-assets/swagger-ui.css'
   });
 
   // Global filters and interceptors
