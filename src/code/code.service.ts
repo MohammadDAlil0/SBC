@@ -43,16 +43,9 @@ export class CodeService {
             '../../uploads', 
             bookUrl.replace('/uploads/', '')
         );
-        const chunks = await this.pdfProcessingService.loadAndSplitPdf(filePath);
+        // const chunks = await this.pdfProcessingService.loadAndSplitPdf(filePath);
 
-        try {
-            // 3. Store in vector database
-            await this.vectorStoreService.createVectorStore(chunks, addBookDto.name);
-        }
-        catch(err) {
-            console.log(err);
-            return err;
-        }
+        // await this.vectorStoreService.createVectorStore(chunks, addBookDto.name);
 
 
         // // 5. Save to database
