@@ -46,16 +46,11 @@ Answer:`;
       // 1. Get the vector store
       const vectorStore = await this.vectorStoreService.getVectorStore(codeName);
 
-      console.log('vector database*********************************', vectorStore);
-
       // 2. Create QA chain
       const qaChain = await this.getQaChain(vectorStore);
 
       // 3. Get answer
       const result = await this.answerQuestion(qaChain, question);
-
-      console.log(result);
-
 
       // 4. Format response
       return {

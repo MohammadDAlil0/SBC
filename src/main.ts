@@ -38,5 +38,6 @@ async function bootstrap() {
   app.useGlobalInterceptors(new CustomResponseInterceptor())
 
   await app.listen(process.env.SERVER_PORT ?? 3000, '0.0.0.0');
+  console.log(`Server is running on port ${process.env.SERVER_PORT ?? 3000}`)
 }
 module.exports = bootstrap();
