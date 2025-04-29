@@ -26,6 +26,7 @@ export class BookController {
         res.status(404).send('Error reading the book');
       }
     });
+    
 
     fileStream.pipe(res);
   }
