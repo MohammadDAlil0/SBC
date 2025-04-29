@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChatSession, Code, Message, User } from 'src/core/models';
-import { QaService } from 'src/core/utils';
 import { Repository } from 'typeorm';
 import { QuestionDto } from './dto';
 import { PaginationDto } from 'src/core/constants';
+import { QaService } from 'src/core/utils';
 
 @Injectable()
 export class ChatService {
@@ -52,7 +52,11 @@ export class ChatService {
     return await this.chatSession.save(newSession);
   }
 
-  async getChatMessages(userId: string, chatSessionId: string, filter: PaginationDto) {
+  async getChatMessages(
+    userId: string,
+    chatSessionId: string,
+    filter: PaginationDto,
+  ) {
     await this.chatSession.findOneOrFail({
       where: {
         id: chatSessionId,
@@ -78,12 +82,25 @@ export class ChatService {
     userId: string,
   ) {
     // 1. Verify chat session exists and belongs to user
-    const chatSession = await this.chatSession.findOneOrFail({
+    const chatSession = (await this.chatSession.findOneOrFail({
       where: { id: chatSessionId, user: { id: userId } },
       relations: ['code'],
-    }) as any;
+    })) as any;
 
-    // 2. Save user's question
+    // 2. Get last 4 messages (excluding current question)
+    const previousMessages = await this.message.find({
+      where: { chatSession: { id: chatSessionId } },
+      order: { createdAt: 'DESC' },
+      take: 4,
+    });
+
+    const formattedMessages = previousMessages
+      .reverse()
+      .map((ob) => `${ob.fromUser ? 'human' : 'assistant'}: ${ob.content}`)
+      .join('\n')
+      .trim();
+
+    // 3. Save user's question
     const userMessage = this.message.create({
       content: questionDto.content,
       fromUser: true,
@@ -91,13 +108,14 @@ export class ChatService {
     });
     await this.message.save(userMessage);
 
-    // 3. Get AI response (implement this in QaService)
+    // 4. Get AI response (implement this in QaService)
     const { answer, sources } = await this.qaService.getAnswer(
       questionDto.content,
       chatSession.code.collectionName,
+      formattedMessages,
     );
 
-    // 4. Save AI response
+    // 5. Save AI response
     const aiMessage = this.message.create({
       content: answer,
       fromUser: false,
@@ -111,10 +129,31 @@ export class ChatService {
       sources, // Include sources in response
     };
   }
-  
+
   async deleteChat(chatId: string) {
     await this.chatSession.delete({
-      id: chatId
+      id: chatId,
     });
+  }
+
+  private formatChatHistory(
+    messages: Message[],
+  ): Array<{ question: string; answer: string }> {
+    const history: Array<{ question: string; answer: string }> = [];
+
+    // Pair messages (user question followed by AI answer)
+    for (let i = 0; i < messages.length; i += 2) {
+      const userMsg = messages[i];
+      const aiMsg = messages[i + 1];
+
+      if (userMsg && aiMsg && userMsg.fromUser && !aiMsg.fromUser) {
+        history.push({
+          question: userMsg.content,
+          answer: aiMsg.content,
+        });
+      }
+    }
+
+    return history;
   }
 }
