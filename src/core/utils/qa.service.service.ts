@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { createHistoryAwareRetriever } from 'langchain/chains/history_aware_retriever';
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
+import { BaseMessage } from '@langchain/core/messages';
 
 @Injectable()
 export class QaService {
@@ -47,7 +48,7 @@ export class QaService {
   async getAnswer(
     question: string,
     codeName: string,
-    chatHistory: string,
+    chatHistory: BaseMessage[] = [],
   ) {
     try {
       const contextualizeQPrompt = ChatPromptTemplate.fromMessages([

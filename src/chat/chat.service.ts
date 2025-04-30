@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { QuestionDto } from './dto';
 import { PaginationDto } from 'src/core/constants';
 import { QaService } from 'src/core/utils';
+import { AIMessage, HumanMessage } from '@langchain/core/messages';
 
 @Injectable()
 export class ChatService {
@@ -96,9 +97,10 @@ export class ChatService {
 
     const formattedMessages = previousMessages
       .reverse()
-      .map((ob) => `${ob.fromUser ? 'human' : 'assistant'}: ${ob.content}`)
-      .join('\n')
-      .trim();
+      .map((msg) =>
+        msg.fromUser
+          ? new HumanMessage(msg.content)
+          : new AIMessage(msg.content));
 
     // 3. Save user's question
     const userMessage = this.message.create({

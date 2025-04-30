@@ -14,7 +14,7 @@ import { BookModule } from './book/book.module';
   imports: [
     ThrottlerModule.forRoot([{
       ttl: 60000,
-      limit: 20,
+      limit: 1000,
     }]),
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
